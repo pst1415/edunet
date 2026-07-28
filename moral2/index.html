@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성실 퍼즐을 완성하라!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .dragging { opacity: 0.5; transform: scale(0.95); }
+        .drop-highlight { border: 2px dashed #3b82f6 !important; background-color: #eff6ff !important; }
+        .card { transition: all 0.2s ease; }
+        .card.error { border: 2px solid #ef4444 !important; background-color: #fee2e2 !important; }
+        .error-msg { color: #ef4444; font-size: 0.75rem; font-weight: bold; margin-top: 4px; display: none; }
+        .card.error .error-msg { display: block; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-slate-800 mb-2">🧩 성실 조각을 완성하라!</h1>
+            <p class="text-slate-600">행동 카드를 분류하고 '성실'의 의미를 완성해 보세요.</p>
+        </header>
+
+        <div id="game-zone" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div id="bank" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 min-h-[500px]">
+                <h2 class="font-bold text-slate-700 mb-4 flex items-center">
+                    <span class="mr-2">🗂️</span> 행동 카드 목록
+                </h2>
+                <div id="cards-container" class="space-y-3"></div>
+            </div>
+
+            <div id="sincere-zone" class="drop-zone bg-white p-6 rounded-2xl shadow-sm border border-slate-200 min-h-[500px]" data-type="sincere">
+                <h2 class="font-bold text-green-600 mb-4 flex items-center">
+                    <span class="mr-2">✅</span> 성실한 행동
+                </h2>
+                <div class="zone-content space-y-3 min-h-[400px]"></div>
+            </div>
+
+            <div id="insincere-zone" class="drop-zone bg-white p-6 rounded-2xl shadow-sm border border-slate-200 min-h-[500px]" data-type="insincere">
+                <h2 class="font-bold text-red-600 mb-4 flex items-center">
+                    <span class="mr-2">⚠️</span> 성실하지 않은 행동
+                </h2>
+                <div class="zone-content space-y-3 min-h-[400px]"></div>
+            </div>
+        </div>
+
+        <div id="completion-modal" class="hidden mt-10 p-8 bg-blue-600 text-white rounded-3xl text-center shadow-xl">
+            <h2 class="text-3xl font-bold mb-4">🎉 성실 퍼즐 완성!</h2>
+            <p class="text-xl italic">"성실이란 맡은 일을 책임감을 가지고 꾸준히 끝까지 실천하는 것입니다."</p>
+        </div>
+    </div>
+
+    <script>
+        const data = [
+            { text: "숙제를 미루지 않고 한다.", type: "sincere" },
+            { text: "맡은 청소를 끝까지 한다.", type: "sincere" },
+            { text: "준비물을 미리 챙긴다.", type: "sincere" },
+            { text: "약속 시간을 잘 지킨다.", type: "sincere" },
+            { text: "줄넘기를 꾸준히 연습한다.", type: "sincere" },
+            { text: "읽은 책을 제자리에 꽂는다.", type: "sincere" },
+            { text: "빌린 물건을 제때 돌려준다.", type: "sincere" },
+            { text: "어려운 문제도 끝까지 풀어 본다.", type: "sincere" },
+            { text: "식판을 스스로 정리한다.", type: "sincere" },
+            { text: "친구와 한 약속을 지킨다.", type: "sincere" },
+            { text: "악기를 매일 조금씩 연습한다.", type: "sincere" },
+            { text: "자신의 실수를 솔직하게 인정한다.", type: "sincere" },
+            { text: "모둠에서 맡은 역할을 책임감 있게 한다.", type: "sincere" },
+            { text: "체육복을 전날 미리 준비한다.", type: "sincere" },
+            { text: "쓰레기를 끝까지 분리배출한다.", type: "sincere" },
+            { text: "일기를 꾸준히 쓴다.", type: "sincere" },
+            { text: "식사 후 스스로 자리를 정리한다.", type: "sincere" },
+            { text: "운동이 힘들어도 목표까지 노력한다.", type: "sincere" },
+            { text: "부모님과 약속한 시간을 지킨다.", type: "sincere" },
+            { text: "학교 과제를 기한 안에 제출한다.", type: "sincere" },
+            { text: "숙제를 내일 하려고 미룬다.", type: "insincere" },
+            { text: "힘들다고 맡은 일을 중간에 그만둔다.", type: "insincere" },
+            { text: "준비물을 자주 잊어버린다.", type: "insincere" },
+            { text: "약속 시간에 늦고도 사과하지 않는다.", type: "insincere" },
+            { text: "연습을 하루 하고 그만둔다.", type: "insincere" },
+            { text: "책을 아무 곳에나 두고 간다.", type: "insincere" },
+            { text: "빌린 물건을 계속 미루고 돌려주지 않는다.", type: "insincere" },
+            { text: "어려운 문제를 보자마자 포기한다.", type: "insincere" },
+            { text: "식판 정리를 친구에게 미룬다.", type: "insincere" },
+            { text: "친구와 한 약속을 쉽게 어긴다.", type: "insincere" },
+            { text: "연습하기 싫다고 핑계를 댄다.", type: "insincere" },
+            { text: "실수를 다른 사람 탓으로 돌린다.", type: "insincere" },
+            { text: "모둠 활동에서 아무 일도 하지 않는다.", type: "insincere" },
+            { text: "체육복을 챙기지 않아 수업에 참여하지 못한다.", type: "insincere" },
+            { text: "귀찮다고 쓰레기를 아무 곳에 버린다.", type: "insincere" },
+            { text: "일기를 며칠씩 몰아서 쓴다.", type: "insincere" },
+            { text: "먹은 자리를 그대로 두고 간다.", type: "insincere" },
+            { text: "조금 힘들다고 바로 쉬려고 한다.", type: "insincere" },
+            { text: "부모님과의 약속을 자꾸 미룬다.", type: "insincere" },
+            { text: "과제를 하지 않고 제출하지 않는다.", type: "insincere" }
+        ];
+
+        const container = document.getElementById('cards-container');
+        data.sort(() => Math.random() - 0.5).forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = "card bg-slate-100 p-4 rounded-xl cursor-grab border border-slate-200 shadow-sm text-sm";
+            card.draggable = true;
+            card.dataset.type = item.type;
+            card.id = `c${index}`;
+            card.innerHTML = `${item.text}<div class="error-msg">다시 해보세요!</div>`;
+            card.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', e.target.id);
+                card.classList.add('dragging');
+            });
+            card.addEventListener('dragend', () => card.classList.remove('dragging'));
+            container.appendChild(card);
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', e => e.preventDefault());
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                const id = e.dataTransfer.getData('text/plain');
+                const card = document.getElementById(id);
+                const targetZoneType = zone.dataset.type;
+                
+                zone.querySelector('.zone-content').appendChild(card);
+                
+                if (card.dataset.type !== targetZoneType) {
+                    card.classList.add('error');
+                } else {
+                    card.classList.remove('error');
+                }
+                validateGame();
+            });
+        });
+
+        document.getElementById('bank').addEventListener('dragover', e => e.preventDefault());
+        document.getElementById('bank').addEventListener('drop', e => {
+            e.preventDefault();
+            const id = e.dataTransfer.getData('text/plain');
+            const card = document.getElementById(id);
+            card.classList.remove('error');
+            document.getElementById('cards-container').appendChild(card);
+            validateGame();
+        });
+
+        function validateGame() {
+            const allCards = document.querySelectorAll('.card');
+            const placedCards = document.querySelectorAll('.zone-content .card');
+            const errors = document.querySelectorAll('.card.error');
+            
+            if (placedCards.length === 40 && errors.length === 0) {
+                document.getElementById('completion-modal').classList.remove('hidden');
+                document.getElementById('game-zone').classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                document.getElementById('completion-modal').classList.add('hidden');
+                document.getElementById('game-zone').classList.remove('opacity-50', 'pointer-events-none');
+            }
+        }
+    </script>
+</body>
+</html>
