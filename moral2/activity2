@@ -330,11 +330,11 @@
     <script>
         // Data Structures
         const SITUATIONS = [
-            { id: 1, icon: "🏃", title: "새벽마다 연습하는 운동선수", desc: "매일 아침 6시에 일어나 비가 오나 피곤하나 연습하는 육상선수" },
-            { id: 2, icon: "📚", title: "매일 책을 읽는 학생", desc: "처음엔 재미없었지만 매일 밤 20분씩 8개월째 책을 읽는 학생" },
+            { id: 1, icon: "🏃", title: "새벽마다 연습하는 운동선수", desc: "매일 아침 6시에 일어나 구슬땀을 흘리며 연습하는 육상선수" },
+            { id: 2, icon: "📚", title: "매일 책을 읽는 학생", desc: "처음엔 재미없었지만 매일 밤 30분씩 1년째 책을 읽는 학생" },
             { id: 3, icon: "🎻", title: "악기를 꾸준히 연습하는 친구", desc: "어려워도 포기하지 않고 매일 30분씩 바이올린을 연습하는 친구" },
-            { id: 4, icon: "🏫", title: "30년 동안 학교를 지킨 경비원", desc: "학생들의 안전을 위해 비가 오나 눈이 오나 매일 학교를 살피는 경비원 선생님" },
-            { id: 5, icon: "🍱", title: "매일 도시락을 만드는 부모님", desc: "피곤해도 가족을 위해 새벽부터 일어나 기쁜 마음으로 도시락을 싸주시는 부모님" }
+            { id: 4, icon: "🏫", title: "30년 동안 학교를 지킨 경비원", desc: "학생들의 안전을 위해 비가 오나 눈이 오나 매일 학교를 살피는 경비원" },
+            { id: 5, icon: "🍱", title: "매일 식사를 만드시는 부모님", desc: "피곤해도 가족을 위해 기쁜 마음으로 식사를 준비하시는 부모님" }
         ];
 
         const QUESTIONS = [
@@ -404,7 +404,7 @@
                     <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 font-black flex items-center justify-center flex-shrink-0">
                         ${i + 1}
                     </div>
-                    <input type="text" id="member-name-${i}" required placeholder="모둠원 이름 (예: 지민)" value="${state.members[i] || ''}" oninput="updateMemberName(${i})"
+                    <input type="text" id="member-name-${i}" required placeholder="모둠원 이름 (예: 박에듀)" value="${state.members[i] || ''}" oninput="updateMemberName(${i})"
                         class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none text-slate-800 font-bold text-base bg-white/90">
                 `;
                 container.appendChild(row);
@@ -638,19 +638,19 @@
                     else if (sit.id === 2) answer = "매일 새로운 이야기를 알게 되는 즐거움이 커서 계속 읽게 되었어요.";
                     else if (sit.id === 3) answer = "제가 연주하는 아름다운 소리를 들으면 기분이 좋아져서 멈출 수가 없어요.";
                     else if (sit.id === 4) answer = "우리 학생들이 매일 아침 밝게 웃으며 안전하게 등교하는 모습을 보면 정말 뿌듯하거든요.";
-                    else if (sit.id === 5) answer = "우리 가족이 제가 만든 도시락을 맛있게 먹고 하루를 힘차게 보낼 생각을 하면 기쁘거든요.";
+                    else if (sit.id === 5) answer = "우리 가족이 제가 만든 음식을 맛있게 먹고 하루를 힘차게 보낼 생각을 하면 기쁘거든요.";
                 } else if (q.includes("포기하고")) {
-                    if (sit.id === 1) answer = "비가 아주 많이 오거나, 몸이 너무 피곤해서 이불 속에서 나가기 싫은 날 가장 포기하고 싶었어요.";
+                    if (sit.id === 1) answer = "비가 아주 많이 오거나 몸이 너무 피곤해서 이불 속에서 나가기 싫은 날 가장 포기하고 싶었어요.";
                     else if (sit.id === 2) answer = "처음 한 달 동안은 책만 펼치면 너무 졸려서 그냥 덮고 자고 싶었어요.";
                     else if (sit.id === 3) answer = "어려운 부분에서 계속 손가락이 꼬이고 틀릴 때 제일 속상하고 그만두고 싶었어요.";
                     else if (sit.id === 4) answer = "추운 겨울에 눈을 치우거나 무더운 여름날 땀을 흘리며 학교를 살필 때 몸이 많이 힘들고 지칠 때가 있죠.";
-                    else if (sit.id === 5) answer = "전날 늦게 잠들어서 아침에 눈을 뜨기 힘들 때, 5분만 더 자고 싶을 때가 많아요.";
+                    else if (sit.id === 5) answer = "전날 늦게 잠들어서 아침에 눈을 뜨기 힘들 때 5분만 더 자고 싶을 때가 많아요.";
                 } else if (q.includes("이겨 냈나요")) {
                     if (sit.id === 1) answer = "대회에서 금메달을 목에 거는 제 모습을 상상하며 벌떡 일어났습니다!";
                     else if (sit.id === 2) answer = "'딱 5분만 더 읽자!'라고 스스로 다독이며 졸음을 참아냈어요.";
                     else if (sit.id === 3) answer = "'천천히 다시 해보자'라고 마음먹고 그 부분만 10번 넘게 반복해서 연습했어요.";
                     else if (sit.id === 4) answer = "'내가 조금 더 꼼꼼히 살피면 우리 아이들이 다치지 않는다'는 생각으로 힘을 냈습니다.";
-                    else if (sit.id === 5) answer = "텅 빈 도시락통을 들고 올 가족들의 미소를 떠올리며 이불을 걷어차고 일어났어요.";
+                    else if (sit.id === 5) answer = "맛있게 먹고 기뻐하는 가족들의 미소를 떠올리며 이불을 걷어차고 일어났어요.";
                 } else if (q.includes("달라진 점")) {
                     if (sit.id === 1) answer = "매일 연습하다 보니 체력도 좋아지고, 어떤 힘든 일도 해낼 수 있다는 자신감이 생겼어요.";
                     else if (sit.id === 2) answer = "예전보다 글도 잘 이해하게 되었고, 수업 시간에 발표도 자신 있게 할 수 있게 되었어요!";
@@ -662,7 +662,7 @@
                     else if (sit.id === 2) answer = "가장 두꺼운 책을 며칠에 걸쳐 다 읽고 마지막 장을 덮었을 때의 그 기분이 잊히지 않아요.";
                     else if (sit.id === 3) answer = "학교 발표회에서 떨지 않고 무사히 연주를 마치고 친구들의 큰 박수를 받았을 때예요.";
                     else if (sit.id === 4) answer = "졸업한 학생들이 어른이 되어서 다시 찾아와 '감사했습니다'라고 인사할 때 가장 보람찹니다.";
-                    else if (sit.id === 5) answer = "가족들이 '오늘 도시락 정말 최고였어!'라며 엄지를 척 들어주었을 때 가장 행복했습니다.";
+                    else if (sit.id === 5) answer = "가족들이 '오늘 음식은 정말 최고였어!'라며 엄지를 척 들어주었을 때 가장 행복했습니다.";
                 } else if (q.includes("어떤 마음")) {
                     if (sit.id === 1) answer = "목표를 향해 흔들리지 않고 끝까지 해내려는 끈기가 가장 필요해요.";
                     else if (sit.id === 2) answer = "처음에는 지루해도 포기하지 않고 꾸준히 하려는 마음가짐이 필요해요.";
@@ -673,7 +673,7 @@
                     if (sit.id === 1) answer = "친구들이 놀자고 해도 '연습을 마친 뒤에 놀자'며 나와의 약속을 먼저 지킨 것이 비결이에요.";
                     else if (sit.id === 2) answer = "매일 잠들기 전 20분이라는 작은 목표를 세우고 하루도 빠짐없이 지킨 덕분이에요.";
                     else if (sit.id === 3) answer = "아무리 피곤해도 매일 30분씩 꾸준히 악기를 꺼내어 잡았던 것이 비결입니다.";
-                    else if (sit.id === 4) answer = "비가 오나 눈이 오나, 하루도 빠짐없이 맡은 일을 해내겠다는 굳은 다짐 덕분입니다.";
+                    else if (sit.id === 4) answer = "비가 오나 눈이 오나 하루도 빠짐없이 맡은 일을 해내겠다는 굳은 다짐 덕분입니다.";
                     else if (sit.id === 5) answer = "대단한 요리는 아니더라도 매일매일 가족을 생각하는 정성스러운 마음을 담는 것이 비결입니다.";
                 } else {
                     answer = "저 스스로를 믿고 묵묵히 실천하는 것이 중요하다고 생각해요.";
@@ -688,8 +688,8 @@
             
             let finalAdvice = "";
             if (sit.id === 1) finalAdvice = "비가 오고 피곤해도 꾹 참고 뛰다 보면 어느새 목표에 닿아 있을 거야. 꿈을 향해 포기하지 마!";
-            else if (sit.id === 2) finalAdvice = "하루 20분, 작아 보이지만 매일 모이면 엄청난 힘이 된단다. 너희도 오늘부터 책 한 권 펼쳐보렴!";
-            else if (sit.id === 3) finalAdvice = "처음엔 삐걱거리는 소리가 나도, 꾸준히 연습하면 아름다운 음악이 돼. 너희들도 뭐든 할 수 있어!";
+            else if (sit.id === 2) finalAdvice = "하루 20분이 작아 보이지만 매일 모이면 엄청난 힘이 된단다. 너희도 오늘부터 책 한 권 펼쳐보렴!";
+            else if (sit.id === 3) finalAdvice = "처음엔 삐걱거리는 소리가 나도 꾸준히 연습하면 아름다운 음악이 돼. 너희들도 뭐든 할 수 있어!";
             else if (sit.id === 4) finalAdvice = "우리 학교 친구들이 항상 안전하게 지내길 바라는 마음으로 일하고 있단다. 너희도 주어진 일을 성실히 해내는 사람이 되렴.";
             else if (sit.id === 5) finalAdvice = "사랑하는 사람을 위해 정성을 다하는 매일매일이 모여 행복이 되는 거란다. 가족들에게 따뜻한 말 한마디 건네보렴.";
             
